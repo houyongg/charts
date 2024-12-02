@@ -29,6 +29,41 @@ entries:
     urls:
     - https://github.com/houyongg/charts/releases/download/common-2.2.5/common-2.2.5.tgz
     version: 2.2.5
+  postgresql:
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 15.1.0
+    created: "2024-12-02T06:17:27.827828625Z"
+    dependencies:
+    - name: common
+      repository: https://houyongg.github.io/charts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: PostgreSQL (Postgres) is an open source object-relational database
+      known for reliability and data integrity. ACID-compliant, it supports foreign
+      keys, joins, views, triggers and stored procedures.
+    digest: e022ffc94ae1e8b33b1a77ed4e821b5ffb1db097a9836cd1ea761ac55046ca89
+    home: https://github.com/bitnami/charts/tree/main/bitnami/postgresql
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
+    - https://www.postgresql.org/
+    urls:
+    - https://github.com/houyongg/charts/releases/download/postgresql-12.1.7/postgresql-12.1.7.tgz
+    version: 12.1.7
   service:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -40,4 +75,4 @@ entries:
     urls:
     - https://github.com/houyongg/charts/releases/download/service-0.1.2/service-0.1.2.tgz
     version: 0.1.2
-generated: "2024-12-02T06:15:44.397186055Z"
+generated: "2024-12-02T06:17:27.827837712Z"
