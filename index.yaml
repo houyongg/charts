@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  service:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-12-02T06:08:19.410230574Z"
+    description: A Helm chart for Kubernetes
+    digest: eac53380e7b0c43bdf0542f210ad8b362f75a0d7b30fdba0ea1214c03e0039e8
+    name: service
+    type: application
+    urls:
+    - https://github.com/houyongg/charts/releases/download/service-0.1.2/service-0.1.2.tgz
+    version: 0.1.2
+generated: "2024-12-02T06:08:19.410235744Z"
