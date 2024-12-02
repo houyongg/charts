@@ -64,6 +64,38 @@ entries:
     urls:
     - https://github.com/houyongg/charts/releases/download/postgresql-12.1.7/postgresql-12.1.7.tgz
     version: 12.1.7
+  redis:
+  - annotations:
+      category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 7.0.10
+    created: "2024-12-02T06:21:17.678792792Z"
+    dependencies:
+    - name: common
+      repository: https://houyongg.github.io/charts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Redis(R) is an open source, advanced key-value store. It is often
+      referred to as a data structure server since keys can contain strings, hashes,
+      lists, sets and sorted sets.
+    digest: 0c86e92e3d9125943703f87be3efab9f8598c6f51703da7b2aab1284dcd01be1
+    home: https://github.com/bitnami/charts/tree/main/bitnami/redis
+    icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
+    keywords:
+    - redis
+    - keyvalue
+    - database
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: redis
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/redis
+    urls:
+    - https://github.com/houyongg/charts/releases/download/redis-17.9.4/redis-17.9.4.tgz
+    version: 17.9.4
   service:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -75,4 +107,4 @@ entries:
     urls:
     - https://github.com/houyongg/charts/releases/download/service-0.1.2/service-0.1.2.tgz
     version: 0.1.2
-generated: "2024-12-02T06:17:27.827837712Z"
+generated: "2024-12-02T06:21:17.678803582Z"
