@@ -107,4 +107,35 @@ entries:
     urls:
     - https://github.com/houyongg/charts/releases/download/service-0.1.2/service-0.1.2.tgz
     version: 0.1.2
-generated: "2024-12-02T06:21:17.678803582Z"
+  superset:
+  - apiVersion: v2
+    appVersion: 4.1.1
+    created: "2024-12-02T06:27:00.834411255Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://houyongg.github.io/charts
+      version: 12.1.7
+    - condition: redis.enabled
+      name: redis
+      repository: https://houyongg.github.io/charts
+      version: 17.9.4
+    description: Apache Superset is a modern, enterprise-ready business intelligence
+      web application
+    digest: a854cfcb26dbf8930c59dfa941479924b493db975c3c83b1330b2a6725668ef5
+    home: https://superset.apache.org/
+    icon: https://artifacthub.io/image/68c1d717-0e97-491f-b046-754e46f46922@2x
+    keywords:
+    - business intelligence
+    - data science
+    maintainers:
+    - email: craig@craigrueda.com
+      name: craig-rueda
+      url: https://github.com/craig-rueda
+    name: superset
+    sources:
+    - https://github.com/apache/superset
+    urls:
+    - https://github.com/houyongg/charts/releases/download/superset-0.13.4/superset-0.13.4.tgz
+    version: 0.13.4
+generated: "2024-12-02T06:27:00.834422356Z"
