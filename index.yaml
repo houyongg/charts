@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   app:
   - apiVersion: v2
+    appVersion: 0.2.0
+    created: "2026-04-08T09:19:13.961631074Z"
+    description: A flexible application deployment chart for zaobao-ops (Flux HelmRelease
+      friendly).
+    digest: 2a5de8a20b4c81e858f98658bf492cf2b2a9f55e3d949e891ce6ebb7cc6eaec8
+    name: app
+    type: application
+    urls:
+    - https://github.com/houyongg/charts/releases/download/app-0.2.0/app-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 0.1.0
     created: "2026-04-08T08:59:28.792090632Z"
     description: A flexible application deployment chart for zaobao-ops (Flux HelmRelease
@@ -150,4 +161,4 @@ entries:
     urls:
     - https://github.com/houyongg/charts/releases/download/superset-0.13.4/superset-0.13.4.tgz
     version: 0.13.4
-generated: "2026-04-08T08:59:28.792097695Z"
+generated: "2026-04-08T09:19:13.961639911Z"
