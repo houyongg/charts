@@ -9,6 +9,10 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- $container := dict }}
+  {{- if and (hasKey .Values "container") (kindIs "map" .Values.container) }}
+  {{- $container = .Values.container }}
+  {{- end }}
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
@@ -48,19 +52,19 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- with .Values.container.command }}
+          {{- with $container.command }}
           command:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.container.args }}
+          {{- with $container.args }}
           args:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.container.ports }}
+          {{- with $container.ports }}
           ports:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.container.env }}
+          {{- with $container.env }}
           env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -69,21 +73,21 @@ spec:
           envFrom:
             {{- $envFrom | nindent 12 }}
           {{- end }}
-          {{- with .Values.container.livenessProbe }}
+          {{- with $container.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.container.readinessProbe }}
+          {{- with $container.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.container.startupProbe }}
+          {{- with $container.startupProbe }}
           startupProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.container.resources | nindent 12 }}
-          {{- with .Values.container.volumeMounts }}
+            {{- toYaml (default (dict) $container.resources) | nindent 12 }}
+          {{- with $container.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}

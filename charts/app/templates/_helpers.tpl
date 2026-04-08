@@ -63,8 +63,12 @@ ServiceAccount name
 Container name
 */}}
 {{- define "app.containerName" -}}
-{{- if .Values.container.name -}}
-{{- .Values.container.name -}}
+{{- $container := dict -}}
+{{- if and (hasKey .Values "container") (kindIs "map" .Values.container) -}}
+{{- $container = .Values.container -}}
+{{- end -}}
+{{- if and $container (hasKey $container "name") $container.name -}}
+{{- $container.name -}}
 {{- else -}}
 {{- include "app.fullname" . -}}
 {{- end -}}
@@ -74,16 +78,32 @@ Container name
 envFrom helpers
 */}}
 {{- define "app.envFrom" -}}
+{{- $container := dict -}}
+{{- if and (hasKey .Values "container") (kindIs "map" .Values.container) -}}
+{{- $container = .Values.container -}}
+{{- end -}}
 {{- $items := list -}}
-{{- if .Values.container.envConfigMap.enabled -}}
-{{- $cmName := (default (printf "%s-env" (include "app.fullname" .)) .Values.container.envConfigMap.name) -}}
+{{- $envConfigMap := dict -}}
+{{- if and $container (hasKey $container "envConfigMap") (kindIs "map" $container.envConfigMap) -}}
+{{- $envConfigMap = $container.envConfigMap -}}
+{{- end -}}
+{{- if and (hasKey $envConfigMap "enabled") $envConfigMap.enabled -}}
+{{- $cmName := (default (printf "%s-env" (include "app.fullname" .)) $envConfigMap.name) -}}
 {{- $items = append $items (dict "configMapRef" (dict "name" $cmName)) -}}
 {{- end -}}
-{{- if .Values.container.envSecret.enabled -}}
-{{- $secName := (default (printf "%s-env" (include "app.fullname" .)) .Values.container.envSecret.name) -}}
+{{- $envSecret := dict -}}
+{{- if and $container (hasKey $container "envSecret") (kindIs "map" $container.envSecret) -}}
+{{- $envSecret = $container.envSecret -}}
+{{- end -}}
+{{- if and (hasKey $envSecret "enabled") $envSecret.enabled -}}
+{{- $secName := (default (printf "%s-env" (include "app.fullname" .)) $envSecret.name) -}}
 {{- $items = append $items (dict "secretRef" (dict "name" $secName)) -}}
 {{- end -}}
-{{- range .Values.container.envFrom -}}
+{{- $extraEnvFrom := list -}}
+{{- if and $container (hasKey $container "envFrom") (kindIs "slice" $container.envFrom) -}}
+{{- $extraEnvFrom = $container.envFrom -}}
+{{- end -}}
+{{- range $extraEnvFrom -}}
 {{- $items = append $items . -}}
 {{- end -}}
 {{- if gt (len $items) 0 -}}
