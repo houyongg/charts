@@ -1,0 +1,12 @@
+应用已渲染完成。
+
+名称: {{ include "app.fullname" . }}
+命名空间: {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+Ingress 已开启，请检查对应的 host/path 配置。
+{{- else if .Values.service.enabled }}
+Service 已创建：{{ include "app.fullname" . }} ({{ .Values.service.type }})
+{{- else }}
+注意：service 未开启（service.enabled=false）。
+{{- end }}

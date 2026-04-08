@@ -1,0 +1,109 @@
+# Default values for app.
+# This chart is intended to be used via Flux HelmRelease + valuesFrom(ConfigMap/Secret).
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+deploymentAnnotations: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+updateStrategy: {}
+
+service:
+  enabled: true
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+
+container:
+  name: ""
+  ports:
+    - name: http
+      containerPort: 80
+      protocol: TCP
+  command: []
+  args: []
+  env: []
+  envFrom: []
+
+  # If enabled, a ConfigMap will be created and mounted as envFrom.
+  envConfigMap:
+    enabled: false
+    name: ""
+    data: {}
+
+  # If enabled, a Secret will be created and mounted as envFrom.
+  envSecret:
+    enabled: false
+    name: ""
+    stringData: {}
+
+  resources: {}
+
+  livenessProbe: {}
+  readinessProbe: {}
+  startupProbe: {}
+
+  volumeMounts: []
+
+initContainers: []
+extraContainers: []
+
+volumes: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: null
+
+pdb:
+  enabled: false
+  minAvailable: 1
+  maxUnavailable: null
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: null
+  path: /metrics
+  scheme: http
+  relabelings: []
+  metricRelabelings: []
+  labels: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+topologySpreadConstraints: []

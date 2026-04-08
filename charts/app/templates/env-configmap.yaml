@@ -1,0 +1,10 @@
+{{- if .Values.container.envConfigMap.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ default (printf "%s-env" (include "app.fullname" .)) .Values.container.envConfigMap.name }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+data:
+  {{- toYaml .Values.container.envConfigMap.data | nindent 2 }}
+{{- end }}
