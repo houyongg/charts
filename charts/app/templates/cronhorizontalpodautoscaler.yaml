@@ -1,0 +1,20 @@
+{{- if and .Values.chpa .Values.chpa.enabled -}}
+apiVersion: autoscaling.alibabacloud.com/v1beta1
+kind: CronHorizontalPodAutoscaler
+metadata:
+  name: {{ default (include "app.fullname" .) .Values.chpa.name }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ .Values.chpa.scaleTargetRef.apiVersion }}
+    kind: {{ .Values.chpa.scaleTargetRef.kind }}
+    name: {{ default (include "app.fullname" .) .Values.chpa.scaleTargetRef.name }}
+  jobs:
+    {{- range .Values.chpa.jobs }}
+    - name: {{ .name | quote }}
+      schedule: {{ .schedule | quote }}
+      targetSize: {{ .targetSize }}
+      runOnce: {{ .runOnce }}
+    {{- end }}
+{{- end }}

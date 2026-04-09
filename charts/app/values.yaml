@@ -4,6 +4,8 @@
 nameOverride: ""
 fullnameOverride: ""
 
+replicaCount: 1
+
 image:
   repository: nginx
   pullPolicy: IfNotPresent
@@ -68,8 +70,16 @@ container:
       cpu: "1"
       memory: 2Gi
 
-  livenessProbe: {}
-  readinessProbe: {}
+  livenessProbe:
+    initialDelaySeconds: 60
+    httpGet:
+      path: /actuator/health/liveness
+      port: http
+  readinessProbe:
+    initialDelaySeconds: 60
+    httpGet:  
+      path: /actuator/health/readiness
+      port: http
   startupProbe: {}
 
   volumeMounts: []
@@ -92,6 +102,23 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: null
+
+chpa:
+  enabled: false
+  name: ""
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ""
+  jobs:
+    - name: scale-up-weekdays
+      schedule: "0 0 8 * * 1-5"
+      targetSize: 1
+      runOnce: false
+    - name: scale-down-weekdays
+      schedule: "0 0 20 * * 1-5"
+      targetSize: 0
+      runOnce: false
 
 pdb:
   enabled: false

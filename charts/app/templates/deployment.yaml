@@ -13,7 +13,7 @@ spec:
   {{- if and (hasKey .Values "container") (kindIs "map" .Values.container) }}
   {{- $container = .Values.container }}
   {{- end }}
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if not (or .Values.autoscaling.enabled (and .Values.chpa .Values.chpa.enabled)) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
