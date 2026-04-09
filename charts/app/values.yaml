@@ -70,16 +70,8 @@ container:
       cpu: "1"
       memory: 2Gi
 
-  livenessProbe:
-    initialDelaySeconds: 60
-    httpGet:
-      path: /actuator/health/liveness
-      port: http
-  readinessProbe:
-    initialDelaySeconds: 60
-    httpGet:  
-      path: /actuator/health/readiness
-      port: http
+  livenessProbe: {}
+  readinessProbe: {}
   startupProbe: {}
 
   volumeMounts: []
