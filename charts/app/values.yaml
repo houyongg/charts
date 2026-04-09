@@ -4,14 +4,13 @@
 nameOverride: ""
 fullnameOverride: ""
 
-replicaCount: 1
-
 image:
   repository: nginx
   pullPolicy: IfNotPresent
   tag: ""
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: regsecret
 
 serviceAccount:
   create: false
