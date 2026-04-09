@@ -2,5 +2,5 @@ apiVersion: v2
 name: app
 description: A flexible application deployment chart for zaobao-ops (Flux HelmRelease friendly).
 type: application
-version: 0.2.1
-appVersion: "0.2.1"
+version: 0.2.2
+appVersion: "0.2.2"
