@@ -4,6 +4,8 @@
 nameOverride: ""
 fullnameOverride: ""
 
+# 仅当 autoscaling.enabled 与 chpa.enabled 均为 false 时才会写入 Deployment.spec.replicas。
+# 任一为 true 时副本由 HPA / CronHPA 接管，修改本字段不会生效，也不会因副本数单独触发滚动更新。
 replicaCount: 1
 
 image:
@@ -88,6 +90,7 @@ ingress:
   hosts: []
   tls: []
 
+# 启用后与 replicaCount 互斥：Deployment 不写 replicas，由 HPA 在 min/max 之间伸缩。
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -95,6 +98,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: null
 
+# 启用后与 replicaCount 互斥：Deployment 不写 replicas，由 CronHPA 的 jobs.targetSize 等调度副本。
 chpa:
   enabled: false
   name: ""
@@ -130,4 +134,17 @@ serviceMonitor:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+# 可用区拓扑打散：启用后注入基于 topology.kubernetes.io/zone 的 topologySpreadConstraints，
+# labelSelector 自动对齐本 Deployment 的 selector
+# 参见：https://www.alibabacloud.com/help/zh/cs/user-guide/zone-topology-scattered
+zoneTopologySpread:
+  enabled: true
+  maxSkew: 1
+  topologyKey: topology.kubernetes.io/zone
+  # DoNotSchedule：各可用区 Pod 数量差不超过 maxSkew，无法满足时不调度（生产高可用推荐配合多副本）。
+  # ScheduleAnyway：尽量打散，无法满足时仍允许调度（单可用区或副本数较少时更不易 Pending）。
+  whenUnsatisfiable: DoNotSchedule
+
+# 追加的拓扑分布约束（列表项会接在 zoneTopologySpread 生成的约束之后）。
 topologySpreadConstraints: []

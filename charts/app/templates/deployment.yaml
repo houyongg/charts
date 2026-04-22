@@ -110,7 +110,17 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.topologySpreadConstraints }}
+      {{- $root := . }}
+      {{- $zts := .Values.zoneTopologySpread | default dict }}
+      {{- $constraints := list }}
+      {{- if and $zts $zts.enabled }}
+      {{- $zoneConstraint := dict "maxSkew" (default 1 $zts.maxSkew) "topologyKey" (default "topology.kubernetes.io/zone" $zts.topologyKey) "whenUnsatisfiable" (default "DoNotSchedule" $zts.whenUnsatisfiable) "labelSelector" (dict "matchLabels" (fromYaml (include "app.selectorLabels" $root))) }}
+      {{- $constraints = append $constraints $zoneConstraint }}
+      {{- end }}
+      {{- range .Values.topologySpreadConstraints }}
+      {{- $constraints = append $constraints . }}
+      {{- end }}
+      {{- if gt (len $constraints) 0 }}
       topologySpreadConstraints:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml $constraints | nindent 8 }}
       {{- end }}
