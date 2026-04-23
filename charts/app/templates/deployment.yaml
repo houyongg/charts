@@ -115,6 +115,9 @@ spec:
       {{- $constraints := list }}
       {{- if and $zts $zts.enabled }}
       {{- $zoneConstraint := dict "maxSkew" (default 1 $zts.maxSkew) "topologyKey" (default "topology.kubernetes.io/zone" $zts.topologyKey) "whenUnsatisfiable" (default "DoNotSchedule" $zts.whenUnsatisfiable) "labelSelector" (dict "matchLabels" (fromYaml (include "app.selectorLabels" $root))) }}
+      {{- with (default list $zts.matchLabelKeys) }}
+      {{- $_ := set $zoneConstraint "matchLabelKeys" . }}
+      {{- end }}
       {{- $constraints = append $constraints $zoneConstraint }}
       {{- end }}
       {{- range .Values.topologySpreadConstraints }}

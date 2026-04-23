@@ -137,6 +137,7 @@ affinity: {}
 
 # 可用区拓扑打散：启用后注入基于 topology.kubernetes.io/zone 的 topologySpreadConstraints，
 # labelSelector 自动对齐本 Deployment 的 selector
+# matchLabelKeys（Kubernetes 1.27+）：滚动更新时按标签值分组计数 skew，避免新旧 ReplicaSet 的 Pod 互相干扰。
 # 参见：https://www.alibabacloud.com/help/zh/cs/user-guide/zone-topology-scattered
 zoneTopologySpread:
   enabled: true
@@ -145,6 +146,8 @@ zoneTopologySpread:
   # DoNotSchedule：各可用区 Pod 数量差不超过 maxSkew，无法满足时不调度（生产高可用推荐配合多副本）。
   # ScheduleAnyway：尽量打散，无法满足时仍允许调度（单可用区或副本数较少时更不易 Pending）。
   whenUnsatisfiable: DoNotSchedule
+  matchLabelKeys:
+    - pod-template-hash
 
 # 追加的拓扑分布约束（列表项会接在 zoneTopologySpread 生成的约束之后）。
 topologySpreadConstraints: []
