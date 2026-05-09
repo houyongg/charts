@@ -75,6 +75,39 @@ Container name
 {{- end }}
 
 {{/*
+envConfigMap / envSecret 为键值 map：非空则创建资源名 <fullname>-env 并 envFrom 挂载（ConfigMap 与 Secret 为不同 kind，可同名）。
+*/}}
+{{- define "app.envConfigMapMountName" -}}
+{{- $root := . -}}
+{{- $container := dict -}}
+{{- if and (hasKey .Values "container") (kindIs "map" .Values.container) -}}
+{{- $container = .Values.container -}}
+{{- end -}}
+{{- $envConfigMap := dict -}}
+{{- if and $container (hasKey $container "envConfigMap") (kindIs "map" $container.envConfigMap) -}}
+{{- $envConfigMap = $container.envConfigMap -}}
+{{- end -}}
+{{- if gt (len $envConfigMap) 0 -}}
+{{- printf "%s-env" (include "app.fullname" $root) -}}
+{{- end -}}
+{{- end }}
+
+{{- define "app.envSecretMountName" -}}
+{{- $root := . -}}
+{{- $container := dict -}}
+{{- if and (hasKey .Values "container") (kindIs "map" .Values.container) -}}
+{{- $container = .Values.container -}}
+{{- end -}}
+{{- $envSecret := dict -}}
+{{- if and $container (hasKey $container "envSecret") (kindIs "map" $container.envSecret) -}}
+{{- $envSecret = $container.envSecret -}}
+{{- end -}}
+{{- if gt (len $envSecret) 0 -}}
+{{- printf "%s-env" (include "app.fullname" $root) -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 envFrom helpers
 */}}
 {{- define "app.envFrom" -}}
@@ -83,20 +116,12 @@ envFrom helpers
 {{- $container = .Values.container -}}
 {{- end -}}
 {{- $items := list -}}
-{{- $envConfigMap := dict -}}
-{{- if and $container (hasKey $container "envConfigMap") (kindIs "map" $container.envConfigMap) -}}
-{{- $envConfigMap = $container.envConfigMap -}}
-{{- end -}}
-{{- if and (hasKey $envConfigMap "enabled") $envConfigMap.enabled -}}
-{{- $cmName := (default (printf "%s-env" (include "app.fullname" .)) $envConfigMap.name) -}}
+{{- $cmName := include "app.envConfigMapMountName" . | trim -}}
+{{- if $cmName -}}
 {{- $items = append $items (dict "configMapRef" (dict "name" $cmName)) -}}
 {{- end -}}
-{{- $envSecret := dict -}}
-{{- if and $container (hasKey $container "envSecret") (kindIs "map" $container.envSecret) -}}
-{{- $envSecret = $container.envSecret -}}
-{{- end -}}
-{{- if and (hasKey $envSecret "enabled") $envSecret.enabled -}}
-{{- $secName := (default (printf "%s-env" (include "app.fullname" .)) $envSecret.name) -}}
+{{- $secName := include "app.envSecretMountName" . | trim -}}
+{{- if $secName -}}
 {{- $items = append $items (dict "secretRef" (dict "name" $secName)) -}}
 {{- end -}}
 {{- $extraEnvFrom := list -}}

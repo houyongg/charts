@@ -6,13 +6,14 @@
 {{- if and $container (hasKey $container "envConfigMap") (kindIs "map" $container.envConfigMap) -}}
 {{- $envConfigMap = $container.envConfigMap -}}
 {{- end -}}
-{{- if and (hasKey $envConfigMap "enabled") $envConfigMap.enabled -}}
+{{- $cmName := include "app.envConfigMapMountName" . | trim -}}
+{{- if $cmName -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ default (printf "%s-env" (include "app.fullname" .)) $envConfigMap.name }}
+  name: {{ $cmName }}
   labels:
     {{- include "app.labels" . | nindent 4 }}
 data:
-  {{- toYaml $envConfigMap.data | nindent 2 }}
+  {{- toYaml $envConfigMap | nindent 2 }}
 {{- end }}

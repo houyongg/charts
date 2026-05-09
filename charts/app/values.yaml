@@ -52,17 +52,11 @@ container:
   env: []
   envFrom: []
 
-  # If enabled, a ConfigMap will be created and mounted as envFrom.
-  envConfigMap:
-    enabled: false
-    name: ""
-    data: {}
+  # 键值即 ConfigMap.data；非空则创建 <fullname>-env 并 envFrom 挂载。
+  envConfigMap: {}
 
-  # If enabled, a Secret will be created and mounted as envFrom.
-  envSecret:
-    enabled: false
-    name: ""
-    stringData: {}
+  # 键值即 Secret.stringData；非空则创建 <fullname>-env 并 envFrom 挂载。
+  envSecret: {}
 
   resources:
     requests:
