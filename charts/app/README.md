@@ -9,12 +9,31 @@
 
 ### 主要能力
 
-- **Deployment**：image、replica、resources、probes、command/args、initContainers/extraContainers、volumes/volumeMounts、nodeSelector/tolerations/affinity/topologySpreadConstraints
+- **Deployment**：image、replica、resources、probes、lifecycle、terminationGracePeriodSeconds、command/args、initContainers/extraContainers、volumes/volumeMounts、nodeSelector/tolerations/affinity/topologySpreadConstraints
 - **Service**：多端口（`service.ports`）
 - **Ingress**：支持 `networking.k8s.io/v1`，后端端口可用 name 或 number（`ingress.hosts[].paths[].servicePort`）
 - **HPA/PDB**：可选
 - **ServiceMonitor**：可选（Prometheus Operator）
 - **env 注入**：可选创建 `ConfigMap/Secret` 并通过 `envFrom` 注入
+
+### 生命周期配置
+
+`container.lifecycle` 会直接渲染到容器的 Kubernetes lifecycle 字段。使用 `preStop` 时，建议同时设置足够的 `terminationGracePeriodSeconds`：
+
+```yaml
+terminationGracePeriodSeconds: 60
+
+container:
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - curl --request POST http://127.0.0.1:8080/internal/drain --data ''; sleep 10
+```
+
+`terminationGracePeriodSeconds` 未设置时，Kubernetes 使用默认值；Chart 不会自动覆盖默认值。
 
 ### values 关键字段示例
 
@@ -41,7 +60,7 @@ service:
       port: 80
       targetPort: http
 
-ingress:
+ ingress:
   enabled: true
   className: nginx
   hosts:
