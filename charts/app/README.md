@@ -60,7 +60,7 @@ service:
       port: 80
       targetPort: http
 
- ingress:
+ingress:
   enabled: true
   className: nginx
   hosts:
