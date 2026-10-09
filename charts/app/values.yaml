@@ -30,6 +30,10 @@ deploymentAnnotations: {}
 podSecurityContext: {}
 securityContext: {}
 
+# Optional pod termination grace period. Set this when using container.lifecycle
+# to ensure the preStop hook and application shutdown can finish in time.
+terminationGracePeriodSeconds: null
+
 updateStrategy: {}
 
 service:
@@ -69,6 +73,7 @@ container:
   livenessProbe: {}
   readinessProbe: {}
   startupProbe: {}
+  lifecycle: {}
 
   volumeMounts: []
 

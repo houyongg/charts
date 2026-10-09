@@ -50,6 +50,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "app.serviceAccountName" . }}
+      {{- if and (hasKey .Values "terminationGracePeriodSeconds") (ne .Values.terminationGracePeriodSeconds nil) }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- with .Values.initContainers }}
@@ -82,6 +85,10 @@ spec:
           {{- if $envFrom }}
           envFrom:
             {{- $envFrom | nindent 12 }}
+          {{- end }}
+          {{- with $container.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with $container.livenessProbe }}
           livenessProbe:
